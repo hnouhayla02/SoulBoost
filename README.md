@@ -1,3 +1,3 @@
 # soulBoost
 
-[Edit in StackBlitz next generation editor ⚡️](https://stackblitz.com/~/github.com/hnouhayla02/soulBoost)
+An therapeutic website that generates quotes and/or quranic verses to make you feel better ;)
