@@ -1,16 +1,16 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { quotes } from '../data/quotes';
-import QuoteCard from '../components/QuoteCard';
+import { verses } from '../data/verses';
+import VerseCard from '../components/VerseCard';
 
-export default function Quotes() {
+export default function Verses() {
   const location = useLocation();
   const navigate = useNavigate();
   const { emotions } = location.state as { emotions: string[] };
 
-  const filteredQuotes = quotes.filter(quote =>
+  const filteredQuotes = verses.filter(verse =>
     emotions.some(emotion => 
-      quote.emotions.some(e => e.toLowerCase().includes(emotion.toLowerCase()))
+      verse.emotions.some(e => e.toLowerCase().includes(emotion.toLowerCase()))
     )
   );
 
@@ -36,7 +36,7 @@ export default function Quotes() {
         <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
           {filteredQuotes.map((quote, index) => (
             <div key={index} className="break-inside-avoid mb-4">
-              <QuoteCard {...quote} />
+              <VerseCard {...quote} />
             </div>
           ))}
         </div>

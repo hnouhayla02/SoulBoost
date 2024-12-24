@@ -4,7 +4,9 @@ import { useNavigate } from 'react-router-dom';
 
 const emotions = [
   "sad", "desperate", "jealous", "confused", "depressed", "inspiration",
-  "anxious", "lonely", "overwhelmed", "hopeful", "motivated", "stressed"
+  "anxious", "lonely", "overwhelmed", "hopeful", "motivated", "stressed", 
+  "tired", "in love", "angry", "bored","mixed feelings"
+
 ];
 
 export default function Home() {
@@ -21,82 +23,106 @@ export default function Home() {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent, type: string) => {
     e.preventDefault();
     const emotions = showChat ? [chatInput] : selectedEmotions;
-    navigate('/quotes', { state: { emotions } });
+  
+    if (type === 'quotes') {
+      navigate('/quotes', { state: { emotions } });
+    } else if (type === 'verses') {
+      navigate('/verses', { state: { emotions } });
+    }
   };
+  
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
-        <header className="text-center mb-12">
+    <div className="min-h-screen gradient-bg flex items-center justify-center p-4 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute w-96 h-96 bg-purple-300 rounded-full blur-3xl opacity-20 -top-20 -left-20 floating"></div>
+        <div className="absolute w-96 h-96 bg-pink-300 rounded-full blur-3xl opacity-20 -bottom-20 -right-20 floating" style={{ animationDelay: '-1.5s' }}></div>
+      </div>
+      
+      <div className="max-w-md w-full perspective relative z-10">
+        <header className="text-center mb-12 page-transition">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <Sparkles className="w-8 h-8 text-purple-600" />
-            <h1 className="text-4xl font-bold text-gray-800">QuoteSpire</h1>
+            <Sparkles className="w-8 h-8 text-white floating" />
+            <h1 className="text-4xl font-bold text-white">SoulBoost</h1>
+            <Sparkles className="w-8 h-8 text-white floating" />
           </div>
-          <p className="text-gray-600">Find inspiration tailored to your emotions</p>
+          <p className="text-white/80">You'll feel better</p>
         </header>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6">
-          {!showChat ? (
-            <div className="space-y-4">
-              <h2 className="text-lg font-medium text-gray-700">How are you feeling?</h2>
-              <div className="flex flex-wrap gap-2">
-                {emotions.map((emotion) => (
-                  <button
-                    type="button"
-                    key={emotion}
-                    onClick={() => handleEmotionToggle(emotion)}
-                    className={`
-                      px-4 py-2 rounded-full text-sm font-medium transition-colors
-                      ${
-                        selectedEmotions.includes(emotion)
-                          ? 'bg-purple-600 text-white hover:bg-purple-700'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }
-                    `}
-                  >
-                    {emotion}
-                    {selectedEmotions.includes(emotion) && (
-                      <X className="inline-block ml-1 w-4 h-4" />
-                    )}
-                  </button>
-                ))}
+        
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 card-hover border border-white/20">
+            {!showChat ? (
+              <div className="space-y-6 page-transition">
+                <h2 className="text-xl font-medium text-white">How are you feeling?</h2>
+                <div className="flex flex-wrap gap-3">
+                  {emotions.map((emotion) => (
+                    <button
+                      type="button"
+                      key={emotion}
+                      onClick={() => handleEmotionToggle(emotion)}
+                      className={`
+                        emotion-tag px-4 py-2 rounded-full text-sm font-medium
+                        ${
+                          selectedEmotions.includes(emotion)
+                            ? 'bg-white text-purple-700 shadow-lg'
+                            : 'bg-white/10 text-white hover:bg-white/20 border border-white/20'
+                        }
+                      `}
+                    >
+                      {emotion}
+                      {selectedEmotions.includes(emotion) && (
+                        <X className="inline-block ml-1 w-4 h-4" />
+                      )}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <h2 className="text-lg font-medium text-gray-700">Tell us how you feel</h2>
-              <textarea
-                value={chatInput}
-                onChange={(e) => setChatInput(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                placeholder="I'm feeling..."
-                rows={4}
-              />
-            </div>
-          )}
+            ) : (
+              <div className="space-y-6 page-transition">
+                <h2 className="text-xl font-medium text-white">Tell us how you feel</h2>
+                <textarea
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  className="w-full p-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:ring-2 focus:ring-white/30 focus:border-transparent transition-all"
+                  placeholder="I'm feeling..."
+                  rows={4}
+                />
+              </div>
+            )}
 
-          <div className="mt-6 flex flex-col gap-4">
+            <div className="mt-8 space-y-4">
             <button
-              type="submit"
-              disabled={(showChat && !chatInput) || (!showChat && selectedEmotions.length === 0)}
-              className="w-full bg-purple-600 text-white py-3 rounded-lg font-medium hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Generate Quotes
-            </button>
-            
-            <button
-              type="button"
-              onClick={() => setShowChat(!showChat)}
-              className="flex items-center justify-center gap-2 text-gray-600 hover:text-purple-600"
-            >
-              <MessageCircle className="w-5 h-5" />
-              {showChat ? 'Use emotion tags instead' : 'Prefer to chat?'}
-            </button>
+  type="button"
+  onClick={(e) => handleSubmit(e, 'quotes')}
+  disabled={(showChat && !chatInput) || (!showChat && selectedEmotions.length === 0)}
+  className="w-full bg-white text-purple-700 py-3 rounded-xl font-medium hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transform transition-all hover:scale-[1.02] active:scale-[0.98]"
+>
+  Generate Quotes
+</button>
+
+<button
+  type="button"
+  onClick={(e) => handleSubmit(e, 'verses')}
+  disabled={(showChat && !chatInput) || (!showChat && selectedEmotions.length === 0)}
+  className="w-full bg-white text-green-700 py-3 rounded-xl font-medium hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transform transition-all hover:scale-[1.02] active:scale-[0.98]"
+>
+  Generate Quran Verses
+</button>
+              
+              <button
+                type="button"
+                onClick={() => setShowChat(!showChat)}
+                className="flex items-center justify-center gap-2 text-white/80 hover:text-white transition-colors"
+              >
+                <MessageCircle className="w-5 h-5" />
+                {showChat ? 'Use emotion tags instead' : 'Prefer to write?'}
+              </button>
+            </div>
           </div>
-        </form>
+        
       </div>
     </div>
   );
