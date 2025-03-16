@@ -23,7 +23,7 @@ export default function Verses() {
       <header className="bg-white/10 backdrop-blur-lg fixed top-0 w-full z-10 border-b border-white/20">
         <div className="container mx-auto px-4 py-4">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/home')}
             className="flex items-center gap-2 text-white/80 hover:text-white transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -43,10 +43,13 @@ export default function Verses() {
 
         {filteredQuotes.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-white/80">No quotes found for the selected emotions.</p>
+            <p className="text-white/80">No verse found. Please be more specific</p>
           </div>
         )}
       </main>
+      <footer className="mt-8 text-center text-white/60 text-sm relative z-10">
+        <p>© 2025 SoulBoost, N. All rights reserved.</p>
+      </footer>
     </div>
     
   );
